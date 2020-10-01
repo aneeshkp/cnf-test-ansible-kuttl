@@ -1,7 +1,9 @@
-Role Name
+Running CNF testing on existing operator using 
 =========
 
-A brief description of the role goes here.
+
+
+This will create KUTTL files to run test on your operators.
 
 Requirements
 ------------
@@ -17,15 +19,14 @@ Dependencies
 ------------
 
 A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+To install it use: ansible-galaxy collection install community.kubernetes.
+Read for more requirement.
+
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+ansible-playbook -i inventory/hosts cnf-test-playbook.yaml -e csv_name="etcdoperator.v0.9.4" -e operator_namespace="my-etcd"
 
 License
 -------

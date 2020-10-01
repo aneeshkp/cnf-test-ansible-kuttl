@@ -1,0 +1,45 @@
+---
+- name: Generate CRD templates"
+  k8s: 
+    name: "{{item.name}}"
+    api_version: "{{item.version}}"
+    namespace: "{{operator_namespace}}"
+    kind: "{{item.kind}}"
+    state: present
+  loop: "{{csv_data_yaml.spec.customresourcedefinitions.owned }}"
+
+# tasks file for operator
+- name: create temporary test directory
+  tempfile:
+    state: directory
+    suffix: "{{test_dir}}"
+  register: test_dir 
+  
+
+- name: Generate test suite templates
+  template:
+    src: kuttl-suite.j2
+    dest: "{{test_dir.path}}/kuttl-test.yaml"
+
+- name: create temporary crd test sub directory
+  file:
+    state: directory
+    path: "{{test_dir.path}}/{{test_crd_dir}}"
+
+- name: Generate CRD templates
+  template:
+    src: crd.j2
+    dest: "{{test_dir.path}}/{{test_crd_dir}}/00-assert.yaml"
+  
+- name: create temporary cr test sub directory
+  file:
+    state: directory
+    path: "{{test_dir.path}}/{{test_cr_dir}}"
+
+- name: Generate CR templates
+  template:
+    src: cr.j2
+    dest: "{{test_dir.path}}/{{test_cr_dir}}/00-assert.yaml"
+
+- debug: 
+    msg: "cd to {{test_dir.path}} and run kubectl kuttl test "

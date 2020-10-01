@@ -1,0 +1,7 @@
+---
+#whatever 
+- name: Test CNF Operator
+  hosts: jumphost
+  roles:
+    - csv-export
+    - kuttltemplate

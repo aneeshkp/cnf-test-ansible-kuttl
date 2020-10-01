@@ -1,0 +1,3 @@
+---
+csv_name: "etcdoperator.v0.9.4"
+operator_namespace: "my-etcd"

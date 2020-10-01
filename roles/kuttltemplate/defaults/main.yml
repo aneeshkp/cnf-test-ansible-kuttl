@@ -1,0 +1,5 @@
+---
+# defaults file for operator
+test_dir: "cnf-kuttl-test"
+test_crd_dir: "crd-test"
+test_cr_dir: "cr-test"

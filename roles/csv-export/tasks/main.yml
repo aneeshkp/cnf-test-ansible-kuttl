@@ -1,0 +1,24 @@
+---
+# tasks file for csv-export
+- name: "Find csv file"
+  block:
+  - name: Searching for CSV file"
+    k8s:
+      name: "{{csv_name}}"
+      api_version: v1alpha1
+      namespace: "{{operator_namespace}}"
+      kind: ClusterServiceVersion
+      state: present
+    register: csv_data
+  #- fail:
+  #    msg: "csv not found {{ csv_name }}"
+  #  when: csv_data.result|length==0   
+  - set_fact: 
+      csv_data_yaml: "{{csv_data.result}}"
+  
+  
+
+
+
+
+

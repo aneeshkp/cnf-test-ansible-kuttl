@@ -1,0 +1,2 @@
+[jumphost]
+localhost ansible_connection=local

@@ -1,9 +1,11 @@
-Running CNF testing on existing operator using 
+An Ansible project for running CNF testing on existing operator with KUTTL 
 =========
 
+ansible-playbook -i inventory/hosts cnf-test-playbook.yaml -e csv_name="etcdoperator.v0.9.4" -e operator_namespace="my-etcd"
 
+The output will create KUTTL files to run test on your operators.
+TODO: Create cnf-operator-test image which will  run ansible and generate KUTTL asserts and execute kuttle test suite on those reports.
 
-This will create KUTTL files to run test on your operators.
 
 Requirements
 ------------

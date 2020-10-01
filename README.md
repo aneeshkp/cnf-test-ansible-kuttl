@@ -1,7 +1,12 @@
 An Ansible project for running CNF testing on existing operator with KUTTL 
 =========
 
-~~~ ansible-playbook -i inventory/hosts cnf-test-playbook.yaml -e csv_name="etcdoperator.v0.9.4" -e operator_namespace="my-etcd"~~~ 
+
+```
+ansible-playbook -i inventory/hosts cnf-test-playbook.yaml -e csv_name="etcdoperator.v0.9.4" -e operator_namespace="my-etcd"
+
+```
+ 
 
 The output will create KUTTL files to run test on your operators.
 

@@ -1,0 +1,13 @@
+{%if csv_data_yaml.spec.customresourcedefinitions.owned is defined %}
+{% for item in csv_data_yaml.spec.customresourcedefinitions.owned %}
+---
+apiVersion: {{item.name.split('.',1)[1]}}/{{item.version}}
+kind: {{item.kind}}
+metadata:
+  namespace: default
+{%endfor%}
+{%endif%}
+
+
+
+  

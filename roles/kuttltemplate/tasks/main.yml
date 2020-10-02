@@ -8,21 +8,18 @@
     state: present
   loop: "{{csv_data_yaml.spec.customresourcedefinitions.owned }}"
 
-- name: Check for CRD instances"
-  k8s: 
-    name: "{{item.name}}"
-    api_version: "{{item.version}}"
-    namespace: "{{operator_namespace}}"
-    kind: "{{item.kind}}"
-    state: present
-  loop: "{{csv_data_yaml.spec.customresourcedefinitions.owned }}"
-
 # tasks file for operator
 - name: create temporary test directory
   tempfile:
     state: directory
     suffix: "{{test_dir}}"
   register: test_dir 
+
+- name: create temporary  test step sub directory
+  file:
+    state: directory
+    path: "{{test_dir.path}}/{{test_steps_dir}}"
+  register: test_sub_folder 
   
 
 - name: Generate test suite templates
@@ -33,22 +30,38 @@
 - name: create temporary crd test sub directory
   file:
     state: directory
-    path: "{{test_dir.path}}/{{test_crd_dir}}"
+    path: "{{test_sub_folder.path}}/{{test_crd_dir}}"
 
-- name: Generate CRD templates
+- name: Generate assert templates for CRD
   template:
     src: crd.j2
-    dest: "{{test_dir.path}}/{{test_crd_dir}}/00-assert.yaml"
+    dest: "{{test_sub_folder.path}}/{{test_crd_dir}}/00-assert.yaml"
   
-- name: create temporary cr test sub directory
+#- name: create temporary cr test sub directory
+#  file:
+#    state: directory
+#    path: "{{test_sub_folder.path}}/{{test_cr_dir}}"
+
+#- name: Generate CR templates
+#  template:
+#    src: crs.j2
+#    dest: "{{test_dir.path}}/{{test_cr_dir}}/00-assert.yaml"
+
+- name: "Create  folder  for CR instances"
   file:
     state: directory
-    path: "{{test_dir.path}}/{{test_cr_dir}}"
+    #path: "{{test_sub_folder.path}}/{{test_cr_dir}}/{{item.name.split('.',1)[0]}}"
+    path: "{{test_sub_folder.path}}/cr-test-{{item.name.split('.',1)[0]}}"
+  loop: "{{csv_data_yaml.spec.customresourcedefinitions.owned}}"
 
-- name: Generate CR templates
-  template:
+- name: "Create assert template for CR instances"
+  template: 
     src: cr.j2
-    dest: "{{test_dir.path}}/{{test_cr_dir}}/00-assert.yaml"
+    #dest: "{{test_sub_folder.path}}/{{test_cr_dir}}/{{item.name.split('.',1)[0]}}/00-assert.yaml"
+    dest: "{{test_sub_folder.path}}/cr-test-{{item.name.split('.',1)[0]}}/00-assert.yaml"
+  loop: "{{csv_data_yaml.spec.customresourcedefinitions.owned}}"
+  loop_control:
+    index_var: index
 
 - debug: 
     msg: "cd to {{test_dir.path}} and run kubectl kuttl test --namespace {{operator_namespace}} --report xml "

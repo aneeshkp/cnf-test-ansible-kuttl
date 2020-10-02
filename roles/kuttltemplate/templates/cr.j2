@@ -1,13 +1,11 @@
-
-
 {%if csv_data_yaml.spec.customresourcedefinitions.owned is defined %}
 {% for item in csv_data_yaml.spec.customresourcedefinitions.owned %}
 ---
 apiVersion: {{item.name}}/{{item.version}}
 kind: {{item.kind}}
 metadata:
- namespace: default
- {% endfor %}
+  namespace: default
+{% endfor %}
 {%endif%}
 
   

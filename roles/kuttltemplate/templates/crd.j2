@@ -1,11 +1,12 @@
 
-{%if csv_data_yaml.spec.customresourcedefinitions.owned is defined %}
+{% if csv_data_yaml.spec.customresourcedefinitions.owned is defined %}
 {% for item in csv_data_yaml.spec.customresourcedefinitions.owned %}
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
- name: {{ item.name}}
+  name: {{ item.name}}
+  namespace: default
 status:
   acceptedNames:
     kind: {{item.kind}}

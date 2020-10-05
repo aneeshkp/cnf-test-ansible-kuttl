@@ -1,0 +1,36 @@
+---
+# tasks file for cnf-container-test
+- name: Get partner pod ip address
+  shell:  
+    cmd: "kubectl exec  {{test_pod}} -- sh -c \"hostname -i | awk '{print $3}'\"" 
+  register: "partner_ipaddress"
+
+#- name: Get partner pod ip address
+#  community.kubernetes.k8s_exec: 
+#    namespace: "{{test_namespace}}"
+#    pod: "{{partner_pod}}"
+#    command : `sh -c "hostname -i | awk '{print $3}'"`
+#  register: "partner_ipaddress"
+
+- debug:
+    msg: "Partner ip address {{partner_ipaddress.stdout}}"
+
+- name: "Ping from {{test_pod}}  to {{partner_pod}}"
+  community.kubernetes.k8s_exec: 
+    namespace: "{{test_namespace}}"
+    pod: "{{partner_pod}}"
+    command: "ping -c 4 {{ partner_ipaddress.stdout}}"
+  register: "ping_result"
+  failed_when: '"4 packets transmitted, 4 received, 0% packet loss" not in  ping_result.stdout'
+  
+
+#- name: "Test ping result"
+#  fail:
+#    msg: "Ping test between  partner and test"
+#  when: '"4 packets transmitted, 4 received, 0% packet loss" not in  ping_result.stdout'
+  
+  
+  
+  
+
+

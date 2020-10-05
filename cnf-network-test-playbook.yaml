@@ -1,0 +1,6 @@
+---
+#whatever 
+- name: Test CNF Network 
+  hosts: jumphost
+  roles:
+    - cnf-container-test

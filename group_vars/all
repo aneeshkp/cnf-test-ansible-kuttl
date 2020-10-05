@@ -1,3 +1,25 @@
 ---
 csv_name: "etcdoperator.v0.9.4"
 operator_namespace: "my-etcd"
+
+
+#ping test from test_pod to partner_pod
+test_pod: test
+partner_pod: partner
+test_namespace: default
+
+
+
+#do not change
+csv-path: csv
+crds-dir: crd
+olm-deployed: true
+init-timeout: 60
+cr_path: cr
+
+
+ConnectInvalidArgumentRegex: '(?m)connect: Invalid argument$'
+#SuccessfulOutputRegex matches a successfully run "ping" command.  That does not mean that no errors or drops
+# occurred during the test.
+#SuccessfulOutputRegex: "((?m)(\d+) packets transmitted, (\d+)( packets){0,1} received, (?:\+(\d+) errors)?.*$)"
+
